@@ -21,7 +21,7 @@ public class DownloaderServiceImpl implements DownloaderService {
     @Override
     @SneakyThrows
     public void downloadAndSaveFile(URL fileUrl, String destinationDir, String fileName, String fileExtension) {
-        File savePath = new File(destinationDir + "\\" + fileName + "." + fileExtension);
+        File savePath = new File(destinationDir + File.separator + fileName + "." + fileExtension);
         FileUtils.copyURLToFile(fileUrl, savePath);
     }
 
