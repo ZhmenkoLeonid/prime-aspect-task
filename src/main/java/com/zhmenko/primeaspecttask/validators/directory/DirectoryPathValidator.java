@@ -8,15 +8,19 @@ import java.nio.file.Path;
 
 @Slf4j
 public class DirectoryPathValidator implements ConstraintValidator<DirectoryPath, String> {
+    private Boolean isWindows;
+    private final String unixPattern = "^/|(/[\\w-]+)+$";
 
     @Override
     public boolean isValid(String saveDirPath, ConstraintValidatorContext constraintValidatorContext) {
-        try {
-            Path.of(saveDirPath);
-        } catch (Exception e) {
-            log.error(saveDirPath + " is not directory path");
-            return false;
-        }
-        return !saveDirPath.contains(".");
+        if (isWindows == null) isWindows = System.getProperty("os.name").startsWith("Windows");
+        if (isWindows) {
+            try {
+                Path.of(saveDirPath);
+            } catch (Exception e) {
+                return false;
+            }
+            return !saveDirPath.contains(".");
+        } else return saveDirPath.matches(unixPattern);
     }
 }
